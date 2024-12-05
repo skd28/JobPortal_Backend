@@ -4,6 +4,9 @@ import cookieParser from "cookie-parser";
 import dotenv from "dotenv";
 import connectDb from "./utils/db.js"
 import user from "./routes/userRoute.js";
+import company from "./routes/companyRoute.js"
+import job from "./routes/jobRoute.js"
+import aplication from "./routes/aplicationRoute.js"
 
 dotenv.config({});
 
@@ -16,10 +19,17 @@ app.get('/',(req,res)=>{
     })
 })
 
-app.use(cors());
+const corsOptions = {
+    origin:'http://localhost:5173',
+    credentials:true
+}
+app.use(cors(corsOptions));
 app.use(cookieParser());
 app.use(express.json());
 app.use("/api/user", user);
+app.use('/api/company',company);
+app.use("/api/job",job);
+app.use("/api/aplication",aplication)
 
 const PORT = process.env.PORT || 3000;
 

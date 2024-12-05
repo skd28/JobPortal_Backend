@@ -1,10 +1,10 @@
 import { User } from "../models/userModels.js";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
-// import getDataUri from "../utils/datauri.js";
-// import cloudinary from "../utils/cloudinary.js";
+import getDataUri from "../utils/datauri.js";
+import cloudinary from "../utils/cloudinary.js";
 
- export const register = async (req, res) => {
+export const register = async (req, res) => {
     try {
         const { fullname, email, phoneNumber, password, role } = req.body;
          
@@ -14,14 +14,14 @@ import jwt from "jsonwebtoken";
                 success: false
             });
         };
-        // const file = req.file;
-        // const fileUri = getDataUri(file);
-        // const cloudResponse = await cloudinary.uploader.upload(fileUri.content);
+        const file = req.file;
+        const fileUri = getDataUri(file);
+        const cloudResponse = await cloudinary.uploader.upload(fileUri.content);
 
         const user = await User.findOne({ email });
         if (user) {
             return res.status(400).json({
-                message: 'User already exist.',
+                message: 'User already exist with this email.',
                 success: false,
             })
         }
@@ -33,9 +33,9 @@ import jwt from "jsonwebtoken";
             phoneNumber,
             password: hashedPassword,
             role,
-            // profile:{
-            //     profilePhoto:cloudResponse.secure_url,
-            // }
+            profile:{
+                profilePhoto:cloudResponse.secure_url,
+            }
         });
 
         return res.status(201).json({
@@ -46,7 +46,7 @@ import jwt from "jsonwebtoken";
         console.log(error);
     }
 }
- export const login = async (req, res) => {
+export const login = async (req, res) => {
     try {
         const { email, password, role } = req.body;
         
@@ -101,7 +101,7 @@ import jwt from "jsonwebtoken";
         console.log(error);
     }
 }
- export const logout = async (req, res) => {
+export const logout = async (req, res) => {
     try {
         return res.status(200).cookie("token", "", { maxAge: 0 }).json({
             message: "Logged out successfully.",
@@ -111,14 +111,14 @@ import jwt from "jsonwebtoken";
         console.log(error);
     }
 }
- export const updateProfile = async (req, res) => {
+export const updateProfile = async (req, res) => {
     try {
         const { fullname, email, phoneNumber, bio, skills } = req.body;
         
-       // const file = req.file;
+        const file = req.file;
         // cloudinary ayega idhar
-       // const fileUri = getDataUri(file);
-       // const cloudResponse = await cloudinary.uploader.upload(fileUri.content);
+        const fileUri = getDataUri(file);
+        const cloudResponse = await cloudinary.uploader.upload(fileUri.content);
 
 
 
@@ -143,10 +143,10 @@ import jwt from "jsonwebtoken";
         if(skills) user.profile.skills = skillsArray
       
         // resume comes later here...
-        // if(cloudResponse){
-        //     user.profile.resume = cloudResponse.secure_url // save the cloudinary url
-        //     user.profile.resumeOriginalName = file.originalname // Save the original file name
-        // }
+        if(cloudResponse){
+            user.profile.resume = cloudResponse.secure_url // save the cloudinary url
+            user.profile.resumeOriginalName = file.originalname // Save the original file name
+        }
 
 
         await user.save();
@@ -169,4 +169,3 @@ import jwt from "jsonwebtoken";
         console.log(error);
     }
 }
-
