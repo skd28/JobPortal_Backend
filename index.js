@@ -19,11 +19,34 @@ app.get('/',(req,res)=>{
     })
 })
 
+// const corsOptions = {
+//     origin:'http://localhost:5173',
+//     credentials:true
+// }
+// app.use(cors(corsOptions));
+
+const allowedOrigins = [
+    'http://localhost:5173',
+    'https://job-backend-beryl.vercel.app', // Add your additional link here
+   
+];
+
 const corsOptions = {
-    origin:'http://localhost:5173',
-    credentials:true
-}
+    origin: (origin, callback) => {
+        // Allow requests with no origin (e.g., mobile apps or curl)
+        if (!origin || allowedOrigins.includes(origin)) {
+            callback(null, true);
+        } else {
+            callback(new Error('Not allowed by CORS'));
+        }
+    },
+    credentials: true,
+};
+
 app.use(cors(corsOptions));
+
+
+
 app.use(cookieParser());
 app.use(express.json());
 app.use("/api/user", user);
