@@ -25,25 +25,25 @@ app.get('/',(req,res)=>{
 // }
 // app.use(cors(corsOptions));
 
-const allowedOrigins = [
-    'http://localhost:5173',
-    'https://job-backend-beryl.vercel.app', // Add your additional link here
+// const allowedOrigins = [
+//     'http://localhost:5173',
+//     'https://job-backend-beryl.vercel.app', // Add your additional link here
    
-];
+// ];
 
-const corsOptions = {
-    origin: (origin, callback) => {
-        // Allow requests with no origin (e.g., mobile apps or curl)
-        if (!origin || allowedOrigins.includes(origin)) {
-            callback(null, true);
-        } else {
-            callback(new Error('Not allowed by CORS'));
-        }
-    },
-    credentials: true,
-};
+// const corsOptions = {
+//     origin: (origin, callback) => {
+//         // Allow requests with no origin (e.g., mobile apps or curl)
+//         if (!origin || allowedOrigins.includes(origin)) {
+//             callback(null, true);
+//         } else {
+//             callback(new Error('Not allowed by CORS'));
+//         }
+//     },
+//     credentials: true,
+// };
 
-app.use(cors(corsOptions));
+app.use(cors());
 
 
 
