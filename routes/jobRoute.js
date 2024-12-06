@@ -5,7 +5,7 @@ import { getAdminJobs, getAllJobs, getJobById, postJob } from "../controllers/jo
 const router = express.Router();
 
 router.route("/post").post(authenticated, postJob);
-router.route("/get").get(authenticated, getAllJobs);
+router.route("/get").get(getAllJobs);
 router.route("/getadminjobs").get(authenticated, getAdminJobs);
 router.route("/get/:id").get(authenticated, getJobById);
 
