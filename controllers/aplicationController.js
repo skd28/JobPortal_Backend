@@ -4,6 +4,7 @@ import { Job } from "../models/jobModels.js";
 export const applyJob = async (req, res) => {
     try {
         const userId = req.id;
+       // console.log("User Id :",userId);
         const jobId = req.params.id;
         if (!jobId) {
             return res.status(400).json({
@@ -42,8 +43,13 @@ export const applyJob = async (req, res) => {
             success:true
         })
     } catch (error) {
-        console.log(error);
+        console.error(error.message); // Log the error message for debugging
+        return res.status(500).json({
+            message: "An error occurred while applying for the job.",
+            success: false,
+        });
     }
+    
 };
 export const getAppliedJobs = async (req,res) => {
     try {
